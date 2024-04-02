@@ -26,9 +26,10 @@ public class UIManager : MonoBehaviour
         abilitiesUI.SetActive(enabled);
     }
 
-    public void ToggleAbilitiesUI()
+    public bool ToggleAbilitiesUI()
     {
         abilitiesUI.SetActive(!abilitiesUI.activeSelf);
+        return abilitiesUI.activeSelf;
     }
 
     public void ChangeSelectedSpellUI(Sprite spellSprite)
@@ -39,5 +40,15 @@ public class UIManager : MonoBehaviour
     public void EnabledTransformSelector(bool enabled)
     {
         transformSelectorUI.SetActive(enabled);
+    }
+
+    public bool IsTransformSelectorOn()
+    {
+        return transformSelectorUI.activeSelf;
+    }
+
+    public bool IsAbilitiesUIOn()
+    {
+        return abilitiesUI.activeSelf;
     }
 }

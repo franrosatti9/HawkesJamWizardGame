@@ -32,8 +32,14 @@ public class PlayerAnimations : MonoBehaviour
         currentAnimator.SetBool("Walking", walking);
         isWalking = walking;
         
-    }   
-    
+    }
+
+    public void CastSpell()
+    {
+        if (currentAnimator != normalAnimator) return;
+        
+        currentAnimator.SetTrigger("CastSpell");
+    }
     // TODO:
     public void StartJump()
     {

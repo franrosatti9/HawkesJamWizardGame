@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float liquifyGravityScale = 3f;
     [SerializeField] private PhysicsMaterial2D normalPMaterial;
     [SerializeField] private PhysicsMaterial2D bouncyPMaterial;
+    
+    [Header("Spells")]
+    [SerializeField] private float spellFireRate = 2f;
+    private float spellCooldown;
 
     private bool _mainControllerEnabled = true;
     private bool _inputEnabled = true;
@@ -39,11 +43,27 @@ public class PlayerController : MonoBehaviour
         playerAbilites = GetComponent<PlayerAbilities>();
         playerAnimations = GetComponent<PlayerAnimations>();
         defaultScale = transform.localScale;
-        playerAbilites.OnPlayerTransformed += HandlePlayerTransformed;
+        
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.OnGameStateChanged += HandleGameState;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnGameStateChanged -= HandleGameState;
+    }
+
+    private void HandleGameState(GameState newState)
+    {
+        _inputEnabled = newState == GameState.Gameplay;
     }
 
     private void Start()
     {
+        playerAbilites.OnPlayerTransformed += HandlePlayerTransformed;
         originalSpeed = speed;
         originalGravityScale = liquifyGravityScale;
     }
@@ -53,17 +73,14 @@ public class PlayerController : MonoBehaviour
         switch (transformation)
         {
             case AllTransformations.Normal:
-                _mainControllerEnabled = true;
                 playerAnimations.Transform(transformation, ResetScaleAndValues);
                 //ResetToNormal();
                 break;
             case AllTransformations.Shrink:
-                _mainControllerEnabled = true;
                 playerAnimations.Transform(transformation, Shrink);
                 //Shrink();
                 break;
             case AllTransformations.Liquify:
-                _mainControllerEnabled = true;
                 playerAnimations.Transform(transformation, Liquify);
                 break;
             case AllTransformations.TurnBouncy:
@@ -80,6 +97,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = originalGravityScale;
         gameObject.layer = 7; // Normal Player Layer
         rb.sharedMaterial = normalPMaterial;
+        _mainControllerEnabled = true;
         
         Vector3 newScale = defaultScale;
         newScale.x *= Mathf.Sign(transform.localScale.x);
@@ -92,6 +110,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = originalGravityScale;
         gameObject.layer = 7; // Normal Player Layer
         rb.sharedMaterial = normalPMaterial;
+        _mainControllerEnabled = true;
         
         Vector3 newScale = shrinkSize;
         newScale.x *= Mathf.Sign(transform.localScale.x);
@@ -112,6 +131,7 @@ public class PlayerController : MonoBehaviour
     {
         ResetScaleAndValues();
 
+        //_mainControllerEnabled = false;
         rb.sharedMaterial = bouncyPMaterial;
     }
 
@@ -119,19 +139,6 @@ public class PlayerController : MonoBehaviour
     {
         if (!_inputEnabled) return;
         
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            UIManager.instance.ToggleAbilitiesUI();
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            UIManager.instance.EnabledTransformSelector(true);
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            UIManager.instance.EnabledTransformSelector(false);
-        }
         
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -140,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.X))
         {
-            playerAbilites.UseSpell();
+            CastSpell();
         }
 
         if (Input.GetKeyDown(KeyCode.C))
@@ -152,6 +159,8 @@ public class PlayerController : MonoBehaviour
         {
             Interact();
         }
+        
+        if (spellCooldown > 0) spellCooldown -= Time.deltaTime;
         
         if (!_mainControllerEnabled) return;
         
@@ -191,6 +200,14 @@ public class PlayerController : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
+    }
+
+    public void CastSpell()
+    {
+        if (spellCooldown > 0f) return; // Don't use spell if on cooldown
+        spellCooldown = spellFireRate; // Reset cooldown if success
+        
+        playerAnimations.CastSpell();
     }
 
     private void Interact()

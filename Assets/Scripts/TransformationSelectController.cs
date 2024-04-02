@@ -14,10 +14,16 @@ public class TransformationSelectController : MonoBehaviour
         playerAbilities.OnTransformationUnlocked += UnlockTransformation;
         gameObject.SetActive(false);
     }
+    
+    private void OnDestroy()
+    {
+        playerAbilities.OnTransformationUnlocked -= UnlockTransformation;
+    }
 
     private void OnEnable()
     {
         TransformationSelectButton.OnAnySelected += OnSelectedHandler;
+        // TODO: LEAN TWEEN ANIMATION?
         
     }
 
@@ -25,6 +31,29 @@ public class TransformationSelectController : MonoBehaviour
     {
         TransformationSelectButton.OnAnySelected -= OnSelectedHandler;
         //playerAbilities.OnTransformationUnlocked -= UnlockTransformation;
+    }
+
+    private void Update()
+    {
+        
+        //TODO: Improve but not important
+        
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            transformationButtons[0].Select();
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            transformationButtons[1].Select();
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            transformationButtons[2].Select();
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            transformationButtons[3].Select();
+        }
     }
 
     public void UnlockTransformation(TransformationSO transformations)
@@ -49,4 +78,6 @@ public class TransformationSelectController : MonoBehaviour
     {
         gameObject.SetActive(enabled);
     }
+
+    
 }

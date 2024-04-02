@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class PlayerAbilities : MonoBehaviour
@@ -12,11 +13,11 @@ public class PlayerAbilities : MonoBehaviour
     private List<SpellSO> unlockedSpells = new List<SpellSO>();
     [SerializeField] private List<TransformationSO> unlockedTransformations = new();
     [SerializeField] private Sprite noSpellsSprite;
+    [SerializeField] private Transform spellCastPosition;
     private SpellSO selectedSpell;
     private TransformationSO currentTransformation;
 
-    [SerializeField] private float spellFireRate = 2f;
-    private float spellCooldown;
+    
 
     [SerializeField] int dnaStones = 0;
     public int DNAStones => dnaStones;
@@ -25,25 +26,16 @@ public class PlayerAbilities : MonoBehaviour
     public event Action<TransformationSO> OnTransformationUnlocked;
     void Start()
     {
-        //AddTransformation(AllTransformations.Normal);
-        //AddTransformation(AllTransformations.Shrink);
-        
         // Select "Normal" form first
         currentTransformation = unlockedTransformations[0];
         SwitchCurrentSpell();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (spellCooldown > 0) spellCooldown -= Time.deltaTime;
     }
 
     public void SwitchCurrentSpell()
     {
         if (unlockedSpells.Count == 0)
         {
-            UIManager.instance.ChangeSelectedSpellUI(selectedSpell.abilitySprite);
+            UIManager.instance.ChangeSelectedSpellUI(noSpellsSprite);
             return;
         }
         int nextSpellIndex = unlockedSpells.FindIndex(s => s == selectedSpell) + 1;
@@ -97,11 +89,12 @@ public class PlayerAbilities : MonoBehaviour
 
     public void UseSpell()
     {
-        if (spellCooldown > 0f) return; // Don't use spell if on cooldown
+        
         //selectedSpell
 
-        spellCooldown = spellFireRate; // Reset cooldown if success
-        
+        var spell = Instantiate(selectedSpell.spellPrefab, spellCastPosition.position, quaternion.identity);
+        spell.transform.right = transform.right * transform.localScale.x;
+
         // INSTANTIATE SELECTEDSPELL'S PREFAB AND SET VELOCITY AND ROTATION
     }
 

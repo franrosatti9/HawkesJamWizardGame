@@ -18,9 +18,12 @@ public class TransformationSelectButton : MonoBehaviour
     public static event Action OnAnySelected;
     void Start()
     {
-        unlocked = false;
+        unlocked = startInteractable;
         GetComponent<Button>().interactable = startInteractable;
-        if (name != null) name.gameObject.SetActive(false);
+        if (name != null)
+        {
+            name.gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -39,6 +42,7 @@ public class TransformationSelectButton : MonoBehaviour
 
     public void Select()
     {
+        if(!unlocked) return;
         playerAbilities.Transform(transformation);
         OnAnySelected?.Invoke();
     }

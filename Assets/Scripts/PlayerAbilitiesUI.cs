@@ -58,7 +58,7 @@ public class PlayerAbilitiesUI : MonoBehaviour
         
         //DNAPartTypes[] currentParts =  dnaSlots.Select(slot => slot.CurrentDNA.DNAType).ToArray();
         
-        DNAPartTypes[] currentParts = new DNAPartTypes[4];
+        DNAPartTypes[] currentParts = new DNAPartTypes[3];
         for (int i = 0; i < dnaSlots.Length; i++)
         {
             currentParts[i] = dnaSlots[i].CurrentDNA.DNAType;
