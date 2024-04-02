@@ -6,5 +6,7 @@ using UnityEngine;
 public class SpellSO : AbilitySO
 {
     public AllSpells spellType;
-    
+
+    public GameObject spellPrefab;
+
 }

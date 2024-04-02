@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5646754b423615d4d8857a89ddfe00d4, type: 3}
   m_Name: LiquifyTransfCombination
   m_EditorClassIdentifier: 
-  combination: 01000000000000000200000003000000
+  combination: 010000000000000002000000
   output: {fileID: 11400000, guid: 1de6829827cbcb2408e963045d2097da, type: 2}

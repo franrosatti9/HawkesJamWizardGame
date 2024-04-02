@@ -29,8 +29,19 @@ public class PlayerAnimations : MonoBehaviour
     {
         if (isWalking.Equals(walking)) return;
         
-        currentAnimator.SetBool("Walking", enabled);
+        currentAnimator.SetBool("Walking", walking);
         isWalking = walking;
+        
+    }   
+    
+    // TODO:
+    public void StartJump()
+    {
+        
+    }
+    //TODO: 
+    public void EndJump()
+    {
         
     }
 

@@ -11,8 +11,12 @@ public class PlayerAbilities : MonoBehaviour
 
     private List<SpellSO> unlockedSpells = new List<SpellSO>();
     [SerializeField] private List<TransformationSO> unlockedTransformations = new();
+    [SerializeField] private Sprite noSpellsSprite;
     private SpellSO selectedSpell;
     private TransformationSO currentTransformation;
+
+    [SerializeField] private float spellFireRate = 2f;
+    private float spellCooldown;
 
     [SerializeField] int dnaStones = 0;
     public int DNAStones => dnaStones;
@@ -26,17 +30,22 @@ public class PlayerAbilities : MonoBehaviour
         
         // Select "Normal" form first
         currentTransformation = unlockedTransformations[0];
+        SwitchCurrentSpell();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (spellCooldown > 0) spellCooldown -= Time.deltaTime;
     }
 
     public void SwitchCurrentSpell()
     {
-        if(unlockedSpells.Count == 0) return;
+        if (unlockedSpells.Count == 0)
+        {
+            UIManager.instance.ChangeSelectedSpellUI(selectedSpell.abilitySprite);
+            return;
+        }
         int nextSpellIndex = unlockedSpells.FindIndex(s => s == selectedSpell) + 1;
         if (nextSpellIndex >= unlockedSpells.Count)
         {
@@ -88,7 +97,10 @@ public class PlayerAbilities : MonoBehaviour
 
     public void UseSpell()
     {
+        if (spellCooldown > 0f) return; // Don't use spell if on cooldown
         //selectedSpell
+
+        spellCooldown = spellFireRate; // Reset cooldown if success
         
         // INSTANTIATE SELECTEDSPELL'S PREFAB AND SET VELOCITY AND ROTATION
     }

@@ -8,6 +8,8 @@ using UnityEngine.Serialization;
 public class PlayerController : MonoBehaviour
 {
     private float hInput;
+    [SerializeField] float originalSpeed;
+    private float originalGravityScale;
     [SerializeField] float speed = 8f;
     [SerializeField] float jumpForce = 16f;
     private bool isFacingRight = true;
@@ -20,6 +22,10 @@ public class PlayerController : MonoBehaviour
     [Header("Transformations")] 
     private Vector3 defaultScale;
     [SerializeField] private Vector3 shrinkSize;
+    [SerializeField] private float liquifySpeed = 3f;
+    [SerializeField] private float liquifyGravityScale = 3f;
+    [SerializeField] private PhysicsMaterial2D normalPMaterial;
+    [SerializeField] private PhysicsMaterial2D bouncyPMaterial;
 
     private bool _mainControllerEnabled = true;
     private bool _inputEnabled = true;
@@ -36,13 +42,19 @@ public class PlayerController : MonoBehaviour
         playerAbilites.OnPlayerTransformed += HandlePlayerTransformed;
     }
 
+    private void Start()
+    {
+        originalSpeed = speed;
+        originalGravityScale = liquifyGravityScale;
+    }
+
     private void HandlePlayerTransformed(AllTransformations transformation)
     {
         switch (transformation)
         {
             case AllTransformations.Normal:
                 _mainControllerEnabled = true;
-                playerAnimations.Transform(transformation, ResetToNormal);
+                playerAnimations.Transform(transformation, ResetScaleAndValues);
                 //ResetToNormal();
                 break;
             case AllTransformations.Shrink:
@@ -52,7 +64,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case AllTransformations.Liquify:
                 _mainControllerEnabled = true;
-                playerAnimations.Transform(transformation, ResetToNormal);
+                playerAnimations.Transform(transformation, Liquify);
                 break;
             case AllTransformations.TurnBouncy:
                 TurnBouncy();
@@ -62,8 +74,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ResetToNormal()
+    private void ResetScaleAndValues()
     {
+        speed = originalSpeed;
+        rb.gravityScale = originalGravityScale;
+        gameObject.layer = 7; // Normal Player Layer
+        rb.sharedMaterial = normalPMaterial;
+        
         Vector3 newScale = defaultScale;
         newScale.x *= Mathf.Sign(transform.localScale.x);
         transform.localScale = newScale;
@@ -71,15 +88,31 @@ public class PlayerController : MonoBehaviour
 
     private void Shrink()
     {
+        speed = originalSpeed;
+        rb.gravityScale = originalGravityScale;
+        gameObject.layer = 7; // Normal Player Layer
+        rb.sharedMaterial = normalPMaterial;
+        
         Vector3 newScale = shrinkSize;
         newScale.x *= Mathf.Sign(transform.localScale.x);
         transform.localScale = newScale;
         
     }
 
+    void Liquify()
+    {
+        ResetScaleAndValues();
+        speed = liquifySpeed;
+        rb.gravityScale = liquifyGravityScale;
+        gameObject.layer = 10; // LiquidPlayer Layer
+
+    }
+
     void TurnBouncy()
     {
-        
+        ResetScaleAndValues();
+
+        rb.sharedMaterial = bouncyPMaterial;
     }
 
     void Update()

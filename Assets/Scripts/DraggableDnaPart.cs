@@ -53,7 +53,6 @@ public class DraggableDnaPart : MonoBehaviour, IBeginDragHandler, IDragHandler, 
 public enum DNAPartTypes
 {
     A,
-    T,
-    C,
-    G
+    B,
+    C
 }

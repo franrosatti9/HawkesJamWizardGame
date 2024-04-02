@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5646754b423615d4d8857a89ddfe00d4, type: 3}
-  m_Name: ShrinkTransfCombination
+  m_Name: BouncyTransfCombination
   m_EditorClassIdentifier: 
-  combination: 000000000200000001000000
-  output: {fileID: 11400000, guid: 61e1bc5d8dc62164aba878cfbecc3e82, type: 2}
+  combination: 020000000000000001000000
+  output: {fileID: 11400000, guid: b2e38f10e8cae4e4c98d5b7143ab7422, type: 2}
