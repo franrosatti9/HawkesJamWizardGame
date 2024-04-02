@@ -25,11 +25,13 @@ public class PlayerController : MonoBehaviour
     private bool _inputEnabled = true;
 
     private PlayerAbilities playerAbilites;
+    private PlayerAnimations playerAnimations;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         playerAbilites = GetComponent<PlayerAbilities>();
+        playerAnimations = GetComponent<PlayerAnimations>();
         defaultScale = transform.localScale;
         playerAbilites.OnPlayerTransformed += HandlePlayerTransformed;
     }
@@ -40,15 +42,17 @@ public class PlayerController : MonoBehaviour
         {
             case AllTransformations.Normal:
                 _mainControllerEnabled = true;
-                ResetToNormal();
+                playerAnimations.Transform(transformation, ResetToNormal);
+                //ResetToNormal();
                 break;
             case AllTransformations.Shrink:
                 _mainControllerEnabled = true;
-                Shrink();
+                playerAnimations.Transform(transformation, Shrink);
+                //Shrink();
                 break;
-            case AllTransformations.Grow:
-                break;
-            case AllTransformations.Liquidify:
+            case AllTransformations.Liquify:
+                _mainControllerEnabled = true;
+                playerAnimations.Transform(transformation, ResetToNormal);
                 break;
             case AllTransformations.TurnBouncy:
                 TurnBouncy();
@@ -86,6 +90,15 @@ public class PlayerController : MonoBehaviour
         {
             UIManager.instance.ToggleAbilitiesUI();
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            UIManager.instance.EnabledTransformSelector(true);
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            UIManager.instance.EnabledTransformSelector(false);
+        }
         
         if (Input.GetKeyDown(KeyCode.Q))
         {
@@ -110,6 +123,8 @@ public class PlayerController : MonoBehaviour
         if (!_mainControllerEnabled) return;
         
         hInput = Input.GetAxisRaw("Horizontal");
+        
+        if(hInput != 0) playerAnimations.SetWalking(true);
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {

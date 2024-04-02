@@ -2,11 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
     [SerializeField] private GameObject abilitiesUI;
+    [SerializeField] private GameObject transformSelectorUI;
+    [SerializeField] private Image selectedSpellSprite;
 
     private void Awake()
     {
@@ -25,5 +28,15 @@ public class UIManager : MonoBehaviour
     public void ToggleAbilitiesUI()
     {
         abilitiesUI.SetActive(!abilitiesUI.activeSelf);
+    }
+
+    public void ChangeSelectedSpellUI(Sprite spellSprite)
+    {
+        selectedSpellSprite.sprite = spellSprite;
+    }
+    
+    public void EnabledTransformSelector(bool enabled)
+    {
+        transformSelectorUI.SetActive(enabled);
     }
 }

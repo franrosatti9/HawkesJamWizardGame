@@ -18,6 +18,7 @@ public class PlayerAbilities : MonoBehaviour
     public int DNAStones => dnaStones;
 
     public event Action<AllTransformations> OnPlayerTransformed;
+    public event Action<TransformationSO> OnTransformationUnlocked;
     void Start()
     {
         //AddTransformation(AllTransformations.Normal);
@@ -43,6 +44,7 @@ public class PlayerAbilities : MonoBehaviour
         }
         selectedSpell = unlockedSpells[nextSpellIndex];
         
+        UIManager.instance.ChangeSelectedSpellUI(selectedSpell.abilitySprite);
         // CHANGE SPELL UI, MAYBE BULLET COLOR OR PREFAB 
         Debug.Log("Selected Spell: " + selectedSpell);
     }
@@ -62,7 +64,7 @@ public class PlayerAbilities : MonoBehaviour
 
     public void Transform(TransformationSO newTransformation)
     {
-        if (!unlockedTransformations.Contains(newTransformation)) return;
+        if (!unlockedTransformations.Contains(newTransformation)) return;  
         currentTransformation = newTransformation;
 
         OnPlayerTransformed?.Invoke(currentTransformation.transformationType);
@@ -76,7 +78,7 @@ public class PlayerAbilities : MonoBehaviour
 
     public void AddTransformation(TransformationSO newTransformation)
     {
-        if(!unlockedTransformations.Contains(newTransformation)) unlockedTransformations.Add(newTransformation);
+        unlockedTransformations.Add(newTransformation);
     }
 
     public void AddSpell(SpellSO newSpell)
@@ -97,7 +99,11 @@ public class PlayerAbilities : MonoBehaviour
         
         if (newAbility.GetType() == typeof(TransformationSO))
         {
-            AddTransformation((TransformationSO) newAbility);
+            if (!unlockedTransformations.Contains(newAbility))
+            {
+                AddTransformation((TransformationSO)newAbility);
+                OnTransformationUnlocked?.Invoke((TransformationSO)newAbility);
+            }
         }
         else if (newAbility.GetType() == typeof(SpellSO))
         {
@@ -133,7 +139,6 @@ public enum AllTransformations
 {
     Normal,
     Shrink,
-    Grow,
-    Liquidify,
+    Liquify,
     TurnBouncy
 }

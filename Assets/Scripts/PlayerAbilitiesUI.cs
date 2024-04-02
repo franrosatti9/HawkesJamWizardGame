@@ -26,9 +26,15 @@ public class PlayerAbilitiesUI : MonoBehaviour
 
     private AbilitySO output;
 
-    private bool inputEnabled = true;
+    private bool inputEnabled = false;
 
     private HashSet<AbilitySO> discoveredOutputs = new HashSet<AbilitySO>();
+
+    private void Awake()
+    {
+        UpdateUI();
+        gameObject.SetActive(false);
+    }
 
     private void OnEnable()
     {

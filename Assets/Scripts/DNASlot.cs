@@ -13,7 +13,7 @@ public class DNASlot : MonoBehaviour, IDropHandler
     public static event Action OnAnySlotUpdated;
     void Start()
     {
-        //currentDna = GetComponentInChildren<DraggableDnaPart>();
+        SetInteractable(false);
     }
 
     // Update is called once per frame
@@ -60,6 +60,6 @@ public class DNASlot : MonoBehaviour, IDropHandler
     public void SetInteractable(bool isEnabled)
     {
         GetComponent<Image>().raycastTarget = isEnabled;
-        GetComponentInChildren<Image>().raycastTarget = isEnabled;
+        transform.GetChild(0).gameObject.GetComponentInChildren<Image>().raycastTarget = isEnabled;
     }
 }

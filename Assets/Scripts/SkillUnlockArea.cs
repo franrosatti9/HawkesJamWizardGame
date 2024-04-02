@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class SkillUnlockArea : InteractableBase
 {
+    [SerializeField] private GameObject stoneSprite;
     private bool _playerInArea = false;
     
     // Maybe put some particles or VFX when interacting
@@ -36,6 +37,9 @@ public class SkillUnlockArea : InteractableBase
         }
         
         player.AddDNAStone();
+        
+        //TODO: ANIMATION WHEN SUCCESFULLY GRABBED STONE
+        Destroy(stoneSprite);
         Debug.Log("Interacted Stone");
     }
 
