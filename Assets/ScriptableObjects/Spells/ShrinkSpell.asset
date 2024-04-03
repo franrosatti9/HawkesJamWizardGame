@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48f51c2779df2ad49abcf402fcb717c3, type: 3}
   m_Name: ShrinkSpell
   m_EditorClassIdentifier: 
-  abilityName: Shrink
-  abilitySprite: {fileID: 0}
+  abilityName: Shrink Spell
+  abilitySprite: {fileID: 21300000, guid: b44bcd9235728e64d9dc5ee9cff92692, type: 3}
   abilityDescription: Make another thing smaller
   spellType: 0
+  spellPrefab: {fileID: 3257652672940900554, guid: b9d71fb9c543add49a0c20c663a5232c, type: 3}

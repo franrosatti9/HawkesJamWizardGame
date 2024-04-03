@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     [Header("Transformations")] 
     private Vector3 defaultScale;
     [SerializeField] private Vector3 shrinkSize;
+    [SerializeField] private float shrinkSpeed;
     [SerializeField] private float liquifySpeed = 3f;
     [SerializeField] private float liquifyGravityScale = 3f;
     [SerializeField] private PhysicsMaterial2D normalPMaterial;
@@ -49,11 +50,13 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         GameManager.Instance.OnGameStateChanged += HandleGameState;
+        playerAnimations.OnTransformAnim += EnableInputAndGravity;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnGameStateChanged -= HandleGameState;
+        playerAnimations.OnTransformAnim -= EnableInputAndGravity;
     }
 
     private void HandleGameState(GameState newState)
@@ -84,7 +87,7 @@ public class PlayerController : MonoBehaviour
                 playerAnimations.Transform(transformation, Liquify);
                 break;
             case AllTransformations.TurnBouncy:
-                TurnBouncy();
+                playerAnimations.Transform(transformation, TurnBouncy);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(transformation), transformation, null);
@@ -106,7 +109,7 @@ public class PlayerController : MonoBehaviour
 
     private void Shrink()
     {
-        speed = originalSpeed;
+        speed = shrinkSpeed;
         rb.gravityScale = originalGravityScale;
         gameObject.layer = 7; // Normal Player Layer
         rb.sharedMaterial = normalPMaterial;
@@ -142,7 +145,7 @@ public class PlayerController : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            playerAbilites.SwitchCurrentTransformation();
+            playerAbilites.SwitchCurrentSpell();
         }
 
         if (Input.GetKeyDown(KeyCode.X))
@@ -167,6 +170,7 @@ public class PlayerController : MonoBehaviour
         hInput = Input.GetAxisRaw("Horizontal");
         
         if(hInput != 0) playerAnimations.SetWalking(true);
+        else playerAnimations.SetWalking(false);
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
@@ -204,8 +208,10 @@ public class PlayerController : MonoBehaviour
 
     public void CastSpell()
     {
-        if (spellCooldown > 0f) return; // Don't use spell if on cooldown
+        if (spellCooldown > 0f || !playerAbilites.SpellSelected()
+                               || !IsGrounded() || !playerAbilites.InNormalMode()) return; // Don't use spell if on cooldown or not unlocked, or while jumping
         spellCooldown = spellFireRate; // Reset cooldown if success
+        DisableMovement();
         
         playerAnimations.CastSpell();
     }
@@ -224,5 +230,24 @@ public class PlayerController : MonoBehaviour
     public void AddDNAStone()
     {
         playerAbilites.AddDNAStone();
+    }
+
+    public void DisableMovement()
+    {
+        _mainControllerEnabled = false;
+        hInput = 0;
+    }
+
+    public void EnableMovement()
+    {
+        _mainControllerEnabled = true;
+    }
+
+    public void EnableInputAndGravity(bool transforming)
+    {
+        _inputEnabled = !transforming;
+        rb.isKinematic = transforming;
+        rb.velocity = Vector2.zero;
+        hInput = 0;
     }
 }

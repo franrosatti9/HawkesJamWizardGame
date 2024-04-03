@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class TransformationSelectButton : MonoBehaviour
@@ -13,17 +14,14 @@ public class TransformationSelectButton : MonoBehaviour
     [SerializeField] private PlayerAbilities playerAbilities;
     [SerializeField] private bool startInteractable = false;
     private bool unlocked = false;
+    private Button button;
 
     public TransformationSO Transformation => transformation;
     public static event Action OnAnySelected;
-    void Start()
+    void Awake()
     {
-        unlocked = startInteractable;
-        GetComponent<Button>().interactable = startInteractable;
-        if (name != null)
-        {
-            name.gameObject.SetActive(false);
-        }
+
+        
     }
 
     // Update is called once per frame
@@ -32,10 +30,26 @@ public class TransformationSelectButton : MonoBehaviour
         
     }
 
+    public void Initialize()
+    {
+        unlocked = startInteractable;
+        button = GetComponent<Button>();
+        button.interactable = startInteractable;
+        if (name != null)
+        {
+            name.gameObject.SetActive(false);
+        }
+    }
+
+    public void SetInteractableIfCanTransform(bool canTransform)
+    {
+        button.interactable = canTransform && unlocked;
+    }
+
     public void SetUnlocked()
     {
         unlocked = true;
-        GetComponent<Button>().interactable = true;
+        button.interactable = true;
         icon.sprite = transformation.abilitySprite;
         if (name != null) name.text = transformation.abilityName;
     }

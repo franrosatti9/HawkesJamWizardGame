@@ -76,14 +76,13 @@ public class SpellTarget : MonoBehaviour
             squarified = true;
             
             if(animalController) animalController.Squarify(true);
-            // TODO: IF THERES A WAYPOINT OR MOVEMENT CONTROLLER, DISABLE MOVEMENT, THEN RESUME WHEN DESQUARIFIED
         }
         else
         {
             // Desquarify (?
             mainSpriteRenderer.gameObject.SetActive(true);
             squareSpriteRenderer.SetActive(false);
-            squarified = true;
+            squarified = false;
             
             if(animalController) animalController.Squarify(false);
         }

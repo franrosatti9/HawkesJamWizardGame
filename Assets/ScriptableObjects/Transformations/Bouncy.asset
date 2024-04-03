@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Bouncy
   m_EditorClassIdentifier: 
   abilityName: Turn Bouncy
-  abilitySprite: {fileID: 4591140052969847277, guid: b77342e1883ccd94983f6bd49ddd47a5, type: 3}
+  abilitySprite: {fileID: 21300000, guid: b910e15e1b5c77a4b8a85e81b4ad1ea5, type: 3}
   abilityDescription: Just bounce!
   transformationType: 3

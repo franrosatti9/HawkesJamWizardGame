@@ -25,10 +25,11 @@ public class AnimalController : MonoBehaviour
         
     }
 
-    public void Squarify(bool on)
+    public virtual void Squarify(bool on)
     {
         if (on)
         {
+            // TODO: Clean movement disable, move to waypoint class
             EnableMovement(false);
             gameObject.layer = LayerMask.NameToLayer("AnimalPlayerCollide");
         }
@@ -39,7 +40,7 @@ public class AnimalController : MonoBehaviour
         }
     }
 
-    public void EnableMovement(bool enable)
+    public virtual void EnableMovement(bool enable)
     {
         canMove = enable;
     }

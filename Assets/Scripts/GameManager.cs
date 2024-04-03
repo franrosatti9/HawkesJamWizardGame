@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift) && !UIManager.instance.IsAbilitiesUIOn())
         {
-
+            if (currentState == GameState.Gameplay) return;
             UIManager.instance.EnabledTransformSelector(false);
             SwitchState(GameState.Gameplay);
         }

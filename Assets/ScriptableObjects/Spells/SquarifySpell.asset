@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48f51c2779df2ad49abcf402fcb717c3, type: 3}
   m_Name: SquarifySpell
   m_EditorClassIdentifier: 
-  abilityName: Squarify
-  abilitySprite: {fileID: 7769593804842390018, guid: b77342e1883ccd94983f6bd49ddd47a5, type: 3}
+  abilityName: Squarify Spell
+  abilitySprite: {fileID: 21300000, guid: b7e6953f077cabc45b443d91eae6c1b9, type: 3}
   abilityDescription: Turn someone into a square for some reason
   spellType: 2
+  spellPrefab: {fileID: 541481755353647571, guid: 2f653e3dd1933b0459795bba6f5f756f, type: 3}

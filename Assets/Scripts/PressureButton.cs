@@ -7,6 +7,10 @@ public class PressureButton : MonoBehaviour
 {
     private bool buttonPressed;
     [SerializeField] Animator doorToOpen;
+    [SerializeField] private SpriteRenderer visual;
+    [SerializeField] private Sprite pressedSprite;
+    [SerializeField] private Sprite unpressedSprite;
+    
     void Start()
     {
         
@@ -23,10 +27,12 @@ public class PressureButton : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log("Trigger?");
         if (other.gameObject.TryGetComponent(out AnimalController animal))
         {
             buttonPressed = true;
-            doorToOpen.SetBool("Open", true);
+            //doorToOpen.SetBool("Open", true);
+            visual.sprite = pressedSprite;
         }
     }
 
@@ -35,7 +41,8 @@ public class PressureButton : MonoBehaviour
         if (other.gameObject.TryGetComponent(out AnimalController animal))
         {
             buttonPressed = false;
-            doorToOpen.SetBool("Open", false);
+            //doorToOpen.SetBool("Open", false);
+            visual.sprite = unpressedSprite;
         }
     }
 }

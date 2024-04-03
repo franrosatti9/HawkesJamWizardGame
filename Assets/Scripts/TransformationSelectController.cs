@@ -8,10 +8,14 @@ public class TransformationSelectController : MonoBehaviour
 {
     [SerializeField] private TransformationSelectButton[] transformationButtons;
     [SerializeField] private PlayerAbilities playerAbilities;
+    [SerializeField] private GameObject cantTransformWarning;
+
+    private bool canTransform;
 
     private void Awake()
     {
         playerAbilities.OnTransformationUnlocked += UnlockTransformation;
+        InitButtons();
         gameObject.SetActive(false);
     }
     
@@ -23,9 +27,13 @@ public class TransformationSelectController : MonoBehaviour
     private void OnEnable()
     {
         TransformationSelectButton.OnAnySelected += OnSelectedHandler;
+
+        CheckIfAllowedTransformation(playerAbilities.CanTransform);
         // TODO: LEAN TWEEN ANIMATION?
-        
+
     }
+
+    
 
     private void OnDisable()
     {
@@ -66,17 +74,38 @@ public class TransformationSelectController : MonoBehaviour
         }
     }
 
+    void InitButtons()
+    {
+        for (int i = 0; i < transformationButtons.Length; i++)
+        {
+            transformationButtons[i].Initialize();
+        }
+    }
+
     private void OnSelectedHandler()
     {
         // Close selector when pressing a button
         EnableSelector(false);
     }
 
-    
+    private void CheckIfAllowedTransformation(bool allowed)
+    {
+        if (allowed == canTransform) return; // Don't do the for loop if already updated buttons
+        
+        for (int i = 0; i < transformationButtons.Length; i++)
+        {
+            transformationButtons[i].SetInteractableIfCanTransform(allowed);
+        }
+
+        canTransform = allowed;
+        cantTransformWarning.SetActive(!allowed);
+    }
 
     public void EnableSelector(bool enabled)
     {
         gameObject.SetActive(enabled);
+        
+        if(!enabled) GameManager.Instance.SwitchState(GameState.Gameplay);
     }
 
     

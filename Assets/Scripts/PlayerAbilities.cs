@@ -14,16 +14,18 @@ public class PlayerAbilities : MonoBehaviour
     [SerializeField] private List<TransformationSO> unlockedTransformations = new();
     [SerializeField] private Sprite noSpellsSprite;
     [SerializeField] private Transform spellCastPosition;
+    private bool canTransform;
     private SpellSO selectedSpell;
     private TransformationSO currentTransformation;
 
-    
+
 
     [SerializeField] int dnaStones = 0;
     public int DNAStones => dnaStones;
-
+    public bool CanTransform => canTransform;
     public event Action<AllTransformations> OnPlayerTransformed;
     public event Action<TransformationSO> OnTransformationUnlocked;
+
     void Start()
     {
         // Select "Normal" form first
@@ -38,38 +40,35 @@ public class PlayerAbilities : MonoBehaviour
             UIManager.instance.ChangeSelectedSpellUI(noSpellsSprite);
             return;
         }
+
         int nextSpellIndex = unlockedSpells.FindIndex(s => s == selectedSpell) + 1;
         if (nextSpellIndex >= unlockedSpells.Count)
         {
             nextSpellIndex = 0;
         }
+
         selectedSpell = unlockedSpells[nextSpellIndex];
-        
+
         UIManager.instance.ChangeSelectedSpellUI(selectedSpell.abilitySprite);
         // CHANGE SPELL UI, MAYBE BULLET COLOR OR PREFAB 
         Debug.Log("Selected Spell: " + selectedSpell);
     }
-    
-    public void SwitchCurrentTransformation()
+
+
+
+    public void SwitchCurrentSpell(SpellSO spell)
     {
-        int nextTransformationIndex = unlockedTransformations.FindIndex(s => s == currentTransformation) + 1;
-        if (nextTransformationIndex >= unlockedTransformations.Count)
-        {
-            nextTransformationIndex = 0;
-        }
-        currentTransformation = unlockedTransformations[nextTransformationIndex];
-        
-        // CHANGE TRANSFORMATION UI, OR MAKE A SELECTING WHEEL 
-        Debug.Log("Selected Transformation: " + currentTransformation);
+        selectedSpell = spell;
+        UIManager.instance.ChangeSelectedSpellUI(selectedSpell.abilitySprite);
     }
 
     public void Transform(TransformationSO newTransformation)
     {
-        if (!unlockedTransformations.Contains(newTransformation)) return;  
+        if (!unlockedTransformations.Contains(newTransformation)) return;
         currentTransformation = newTransformation;
 
         OnPlayerTransformed?.Invoke(currentTransformation.transformationType);
-        
+
     }
 
     public void Transform()
@@ -84,12 +83,17 @@ public class PlayerAbilities : MonoBehaviour
 
     public void AddSpell(SpellSO newSpell)
     {
-        if (!unlockedSpells.Contains(newSpell)) unlockedSpells.Add(newSpell);
+        if (!unlockedSpells.Contains(newSpell))
+        {
+            // Add and equip new spell
+            unlockedSpells.Add(newSpell);
+            SwitchCurrentSpell(newSpell);
+        }
     }
 
     public void UseSpell()
     {
-        
+
         //selectedSpell
 
         var spell = Instantiate(selectedSpell.spellPrefab, spellCastPosition.position, quaternion.identity);
@@ -101,7 +105,7 @@ public class PlayerAbilities : MonoBehaviour
     public void AddAbility(AbilitySO newAbility)
     {
         if (dnaStones <= 0) return;
-        
+
         if (newAbility.GetType() == typeof(TransformationSO))
         {
             if (!unlockedTransformations.Contains(newAbility))
@@ -112,9 +116,9 @@ public class PlayerAbilities : MonoBehaviour
         }
         else if (newAbility.GetType() == typeof(SpellSO))
         {
-            AddSpell((SpellSO) newAbility);
+            AddSpell((SpellSO)newAbility);
         }
-        
+
         SpendDNAStone();
     }
 
@@ -129,7 +133,22 @@ public class PlayerAbilities : MonoBehaviour
         dnaStones--;
         // MAYBE SFX
     }
-    
+
+    public bool SpellSelected()
+    {
+        return selectedSpell != null;
+    }
+
+    public bool InNormalMode()
+    {
+        return currentTransformation.transformationType == AllTransformations.Normal;
+    }
+
+    public void AllowTransformation(bool allowed)
+    {
+        
+    }
+
 }
 
 public enum AllSpells

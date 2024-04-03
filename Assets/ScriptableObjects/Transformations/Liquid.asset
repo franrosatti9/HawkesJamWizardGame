@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Liquid
   m_EditorClassIdentifier: 
   abilityName: Liquify
-  abilitySprite: {fileID: 3367770444138230542, guid: 252d1f9f9eb6dfe46873735361f596d6, type: 3}
+  abilitySprite: {fileID: 21300000, guid: eadafc54bd5350e4f9822de8853602f5, type: 3}
   abilityDescription: Turn yourself into a liquid to go through spaces you couldn't
     before
   transformationType: 2

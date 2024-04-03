@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Shrink
   m_EditorClassIdentifier: 
   abilityName: Shrink
-  abilitySprite: {fileID: 152811537136535293, guid: 252d1f9f9eb6dfe46873735361f596d6, type: 3}
+  abilitySprite: {fileID: 21300000, guid: 90801c699bed8bf4caa0c57aa587f0f0, type: 3}
   abilityDescription: Make yourself a lot smaller
   transformationType: 1

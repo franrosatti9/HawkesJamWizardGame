@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 public class PlayerAnimationEvents : MonoBehaviour
 {
     [SerializeField] private PlayerAbilities abilities;
+    [SerializeField] private PlayerController controller;
     void Start()
     {
         
@@ -15,6 +16,16 @@ public class PlayerAnimationEvents : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void EnableInputEvent()
+    {
+        controller.EnableMovement();
+    }
+
+    public void DisableInputEvent()
+    {
+        controller.DisableMovement();
     }
 
     public void CastSpellEvent()

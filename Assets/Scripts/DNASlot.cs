@@ -11,7 +11,7 @@ public class DNASlot : MonoBehaviour, IDropHandler
     public DraggableDnaPart CurrentDNA => currentDna;
 
     public static event Action OnAnySlotUpdated;
-    void Start()
+    void Awake()
     {
         SetInteractable(false);
     }

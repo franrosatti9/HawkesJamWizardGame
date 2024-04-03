@@ -13,6 +13,8 @@ public class PlayerAnimations : MonoBehaviour
     [SerializeField] private Animator liquidAnimator;
     [SerializeField] private Animator bouncyAnimator;
 
+    public event Action<bool> OnTransformAnim; 
+
     private AllTransformations _currentForm = AllTransformations.Normal;
     void Start()
     {
@@ -64,10 +66,14 @@ public class PlayerAnimations : MonoBehaviour
 
     public IEnumerator TransformAnimation(AllTransformations from, AllTransformations to, Action transformAction = null)
     {
+        OnTransformAnim?.Invoke(true);
         currentAnimator.SetTrigger("TransformTo");
         yield return new WaitForSeconds(0.5f);
         transformAction?.Invoke();
         EnableSpriteAndAnimator(to);
+        yield return new WaitForSeconds(0.5f);
+        OnTransformAnim?.Invoke(false);
+        
     }
 
     public void EnableSpriteAndAnimator(AllTransformations transformations)
