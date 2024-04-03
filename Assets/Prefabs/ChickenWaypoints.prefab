@@ -52,9 +52,12 @@ MonoBehaviour:
   canGrow: 0
   canSquarify: 1
   shrinkSize: {x: 0, y: 0, z: 0}
+  newWaypointAfterShrink: {fileID: 0}
+  waypointIndexToOverride: 0
   mainSpriteRenderer: {fileID: 2852204002455148463}
   squareSpriteRenderer: {fileID: 6913474970110023845}
   squareCollider: {fileID: 0}
+  growSize: {x: 0, y: 0, z: 0}
   defaultLayer:
     serializedVersion: 2
     m_Bits: 0
@@ -234,7 +237,7 @@ Transform:
   m_GameObject: {fileID: 7414752584391166257}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0.53, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

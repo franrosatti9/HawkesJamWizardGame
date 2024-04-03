@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class TransformationSelectButton : MonoBehaviour
 {
     [SerializeField] Image icon;
-    [SerializeField] TextMeshProUGUI name;
+    [SerializeField] TextMeshProUGUI nameText;
     [SerializeField] TransformationSO transformation;
     [SerializeField] private PlayerAbilities playerAbilities;
     [SerializeField] private bool startInteractable = false;
@@ -35,9 +36,9 @@ public class TransformationSelectButton : MonoBehaviour
         unlocked = startInteractable;
         button = GetComponent<Button>();
         button.interactable = startInteractable;
-        if (name != null)
+        if (nameText != null)
         {
-            name.gameObject.SetActive(false);
+            nameText.gameObject.SetActive(false);
         }
     }
 
@@ -51,26 +52,26 @@ public class TransformationSelectButton : MonoBehaviour
         unlocked = true;
         button.interactable = true;
         icon.sprite = transformation.abilitySprite;
-        if (name != null) name.text = transformation.abilityName;
+        if (nameText != null) nameText.text = transformation.abilityName;
     }
 
     public void Select()
     {
         if(!unlocked) return;
-        playerAbilities.Transform(transformation);
         OnAnySelected?.Invoke();
+        playerAbilities.Transform(transformation);
     }
 
     public void OnHoverEnter()
     {
         // MAYBE ADD VFX, SOME SPARKS OR SOMETHING
-        if (name == null) return;
-        name.gameObject.SetActive(true);
+        if (nameText == null) return;
+        nameText.gameObject.SetActive(true);
     }
 
     public void OnHoverExit()
     {
-        if (name == null) return;
-        name.gameObject.SetActive(false);
+        if (nameText == null) return;
+        nameText.gameObject.SetActive(false);
     }
 }

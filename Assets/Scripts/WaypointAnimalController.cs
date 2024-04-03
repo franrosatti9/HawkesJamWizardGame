@@ -35,6 +35,11 @@ public class WaypointAnimalController : AnimalController
         waypoints = newWaypoints;
     }
 
+    public void OverrideWaypoint(Transform newWaypoint, int overrideIndex)
+    {
+        waypoints[overrideIndex] = newWaypoint;
+    }
+
     public override void EnableMovement(bool enable)
     {
         base.EnableMovement(enable);

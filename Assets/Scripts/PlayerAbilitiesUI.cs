@@ -34,6 +34,13 @@ public class PlayerAbilitiesUI : MonoBehaviour
     {
         UpdateUI();
         gameObject.SetActive(false);
+        
+        
+    }
+
+    private void Start()
+    {
+        
     }
 
     private void OnEnable()
@@ -50,7 +57,18 @@ public class PlayerAbilitiesUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            // TEST MODE
+
+            foreach (var combination in allCombinations)
+            {
+                _playerAbilities.AddDNAStone();
+                output = combination.output;
+                CreateCombination();
+                Debug.Log("UNLOCK TESTING");
+            }
+        }
     }
 
     public void CheckCombination()

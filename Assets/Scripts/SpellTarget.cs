@@ -11,13 +11,23 @@ public class SpellTarget : MonoBehaviour
 
     private AnimalController animalController;
     private bool squarified = false;
+    private bool shrunk = false;
+    private bool grown = false;
 
     private Vector3 defaultScale;
+    [Header("Shrink")]
     [SerializeField] private Vector3 shrinkSize;
+    [SerializeField] private Transform newWaypointAfterShrink;
+    [SerializeField] private int waypointIndexToOverride;
 
+    [Header("Squarify")]
     [SerializeField] SpriteRenderer mainSpriteRenderer;
     [SerializeField] private GameObject squareSpriteRenderer;
     [SerializeField] private Collider2D squareCollider;
+
+    [Header("Grow")] 
+    [SerializeField] private Vector3 growSize;
+
     [SerializeField] private LayerMask defaultLayer;
     [SerializeField] private LayerMask squareLayer;
     void Start()
@@ -39,21 +49,23 @@ public class SpellTarget : MonoBehaviour
 
     public void HandleReceivedSpell(AllSpells type)
     {
+        // TODO: SEPARATE CODE IN COMPONENTS MAYBE
         bool transformed = false;
+        Vector3 scale = Vector3.one;
         switch (type)
         {
             case AllSpells.Shrink:
-                if(!canShrink) return;
+                if(!canShrink) break;
                 transformed = true;
                 Shrink();
                 break;
             case AllSpells.Grow:
-                if(!canGrow) return;
+                if(!canGrow) break;
                 transformed = true;
                 Grow();
                 break;
             case AllSpells.Squarify:
-                if (!canSquarify) return;
+                if (!canSquarify) break;
                 transformed = true;
                 Squarify();
                 
@@ -61,10 +73,12 @@ public class SpellTarget : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
-        
-        // TODO: VISUAL EFFECT IF TRANSFORMED
-        
-        // if(transformed) vfx...
+
+        if (!transformed)
+        {
+            // TODO: FAIL VFX AND SFX
+        }
+  
     }
 
     private void Squarify()
@@ -86,17 +100,43 @@ public class SpellTarget : MonoBehaviour
             
             if(animalController) animalController.Squarify(false);
         }
+        
+        VFXManager.Instance.CreateVFXAtPoint(mainSpriteRenderer.transform.position, AllVfx.SmokeParticles, defaultScale);
     }
 
     private void Grow()
     {
-        throw new NotImplementedException();
+        if (!grown)
+        {
+            LeanTween.scale(gameObject, growSize, 0.25f).setEaseOutBounce();
+            VFXManager.Instance.CreateVFXAtPoint(mainSpriteRenderer.transform.position, AllVfx.SmokeParticles, growSize);
+            //transform.localScale = growSize;
+        }
+        else
+        {
+            LeanTween.scale(gameObject, defaultScale, 0.25f).setEaseOutBounce();
+            VFXManager.Instance.CreateVFXAtPoint(mainSpriteRenderer.transform.position, AllVfx.SmokeParticles, defaultScale);
+            //transform.localPosition = defaultScale;
+        }
     }
 
     private void Shrink()
     {
         Vector3 newScale = shrinkSize;
         newScale.x *= Mathf.Sign(transform.localScale.x);
-        transform.localScale = newScale;
+        LeanTween.scale(gameObject, newScale, 0.3f);
+        //transform.localScale = newScale;
+        
+        VFXManager.Instance.CreateVFXAtPoint(mainSpriteRenderer.transform.position, AllVfx.SmokeParticles, defaultScale);
+
+        if (animalController
+            && animalController is WaypointAnimalController waypointController)
+        {
+            waypointController.OverrideWaypoint(newWaypointAfterShrink, waypointIndexToOverride);
+        }
+        
+        // TODO: UNSHRINK FUNCTION, MAYBE CONTROL WITH SHRINKONCE BOOL
+
+        canShrink = false;
     }
 }

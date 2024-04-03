@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private float originalGravityScale;
     [SerializeField] float speed = 8f;
     [SerializeField] float jumpForce = 16f;
+    private float defaultJumpForce;
     private bool isFacingRight = true;
 
     [SerializeField] private Rigidbody2D rb;
@@ -23,10 +24,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 defaultScale;
     [SerializeField] private Vector3 shrinkSize;
     [SerializeField] private float shrinkSpeed;
+    [SerializeField] private float shrinkJumpForce;
     [SerializeField] private float liquifySpeed = 3f;
     [SerializeField] private float liquifyGravityScale = 3f;
     [SerializeField] private PhysicsMaterial2D normalPMaterial;
     [SerializeField] private PhysicsMaterial2D bouncyPMaterial;
+    [SerializeField] private PhysicsMaterial2D superBouncyPMaterial;
     
     [Header("Spells")]
     [SerializeField] private float spellFireRate = 2f;
@@ -43,8 +46,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         playerAbilites = GetComponent<PlayerAbilities>();
         playerAnimations = GetComponent<PlayerAnimations>();
-        defaultScale = transform.localScale;
         
+
     }
 
     private void OnEnable()
@@ -67,8 +70,11 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         playerAbilites.OnPlayerTransformed += HandlePlayerTransformed;
+        
+        defaultScale = transform.localScale;
+        defaultJumpForce = jumpForce;
         originalSpeed = speed;
-        originalGravityScale = liquifyGravityScale;
+        originalGravityScale = rb.gravityScale;
     }
 
     private void HandlePlayerTransformed(AllTransformations transformation)
@@ -97,6 +103,7 @@ public class PlayerController : MonoBehaviour
     private void ResetScaleAndValues()
     {
         speed = originalSpeed;
+        jumpForce = defaultJumpForce;
         rb.gravityScale = originalGravityScale;
         gameObject.layer = 7; // Normal Player Layer
         rb.sharedMaterial = normalPMaterial;
@@ -104,12 +111,15 @@ public class PlayerController : MonoBehaviour
         
         Vector3 newScale = defaultScale;
         newScale.x *= Mathf.Sign(transform.localScale.x);
-        transform.localScale = newScale;
+
+        if (newScale != transform.localScale) LeanTween.scale(gameObject, newScale, 0.3f).setEaseInOutBounce();
+        //transform.localScale = newScale;
     }
 
     private void Shrink()
-    {
+    {   
         speed = shrinkSpeed;
+        jumpForce = shrinkJumpForce;
         rb.gravityScale = originalGravityScale;
         gameObject.layer = 7; // Normal Player Layer
         rb.sharedMaterial = normalPMaterial;
@@ -117,8 +127,10 @@ public class PlayerController : MonoBehaviour
         
         Vector3 newScale = shrinkSize;
         newScale.x *= Mathf.Sign(transform.localScale.x);
-        transform.localScale = newScale;
-        
+        //transform.localScale = newScale;
+
+        LeanTween.scale(gameObject, newScale, 0.3f).setEaseInOutBounce();
+
     }
 
     void Liquify()
@@ -174,12 +186,17 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetButtonDown("Jump") && IsGrounded())
         {
+            if (rb.sharedMaterial == bouncyPMaterial) rb.sharedMaterial = superBouncyPMaterial;
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
 
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+        if (Input.GetButtonUp("Jump")){
+            if(rb.sharedMaterial == superBouncyPMaterial) rb.sharedMaterial = bouncyPMaterial;
+            
+            if(rb.velocity.y > 0f)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            }
         }
 
         Flip();
@@ -249,5 +266,10 @@ public class PlayerController : MonoBehaviour
         rb.isKinematic = transforming;
         rb.velocity = Vector2.zero;
         hInput = 0;
+    }
+
+    private void OnDestroy()
+    {
+        playerAbilites.OnPlayerTransformed -= HandlePlayerTransformed;
     }
 }

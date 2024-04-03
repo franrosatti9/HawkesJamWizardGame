@@ -98,7 +98,6 @@ public class PlayerAnimations : MonoBehaviour
                 liquidAnimator.gameObject.SetActive(false);
                 bouncyAnimator.gameObject.SetActive(false);
                 break;
-                break;
             case AllTransformations.Liquify:
                 currentAnimator = liquidAnimator;
                 liquidAnimator.gameObject.SetActive(true);

@@ -31,6 +31,8 @@ public class PlayerAbilities : MonoBehaviour
         // Select "Normal" form first
         currentTransformation = unlockedTransformations[0];
         SwitchCurrentSpell();
+        
+        
     }
 
     public void SwitchCurrentSpell()
