@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PressureButton : MonoBehaviour
 {
-    [SerializeField] Animator doorToOpen;
+    [SerializeField] DoorPillar doorToOpen;
     [SerializeField] private SpriteRenderer visual;
     [SerializeField] private Sprite pressedSprite;
     [SerializeField] private Sprite unpressedSprite;
@@ -13,10 +13,9 @@ public class PressureButton : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Trigger?");
         if (other.gameObject.TryGetComponent(out AnimalController animal))
         {
-            //doorToOpen.SetBool("Open", true);
+            doorToOpen.Open();
             visual.sprite = pressedSprite;
         }
     }
@@ -25,7 +24,7 @@ public class PressureButton : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out AnimalController animal))
         {
-            //doorToOpen.SetBool("Open", false);
+            doorToOpen.Close();
             visual.sprite = unpressedSprite;
         }
     }

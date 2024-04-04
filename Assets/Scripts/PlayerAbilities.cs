@@ -39,7 +39,7 @@ public class PlayerAbilities : MonoBehaviour
     {
         if (unlockedSpells.Count == 0)
         {
-            UIManager.instance.ChangeSelectedSpellUI(noSpellsSprite);
+            UIManager.instance.ChangeSelectedSpellUI(noSpellsSprite, "");
             return;
         }
 
@@ -51,7 +51,7 @@ public class PlayerAbilities : MonoBehaviour
 
         selectedSpell = unlockedSpells[nextSpellIndex];
 
-        UIManager.instance.ChangeSelectedSpellUI(selectedSpell.abilitySprite);
+        UIManager.instance.ChangeSelectedSpellUI(selectedSpell.abilitySprite, selectedSpell.abilityName);
         // CHANGE SPELL UI, MAYBE BULLET COLOR OR PREFAB 
         Debug.Log("Selected Spell: " + selectedSpell);
     }
@@ -61,7 +61,7 @@ public class PlayerAbilities : MonoBehaviour
     public void SwitchCurrentSpell(SpellSO spell)
     {
         selectedSpell = spell;
-        UIManager.instance.ChangeSelectedSpellUI(selectedSpell.abilitySprite);
+        UIManager.instance.ChangeSelectedSpellUI(selectedSpell.abilitySprite, selectedSpell.abilityName);
     }
 
     public void Transform(TransformationSO newTransformation)
@@ -148,7 +148,7 @@ public class PlayerAbilities : MonoBehaviour
 
     public void AllowTransformation(bool allowed)
     {
-        
+        canTransform = allowed;
     }
 
 }

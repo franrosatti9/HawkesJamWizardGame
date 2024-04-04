@@ -113,9 +113,6 @@ public class PlayerAbilitiesUI : MonoBehaviour
             outputSprite.sprite = undiscoveredSprite;
             createCombinationButton.interactable = false;
         }
-        
-        Debug.Log("Current parts: " + currentParts.Length);
-        Debug.Log("Output: " + output);
     }
 
     public void CreateCombination()

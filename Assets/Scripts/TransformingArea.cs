@@ -19,9 +19,10 @@ public class TransformingArea : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent(out PlayerAbilities abilities))
+        if (other.TryGetComponent(out PlayerController controller))
         {
-            abilities.AllowTransformation(true);
+            GameManager.Instance.SetLastCheckpoint(transform);
+            controller.PlayerAbilities.AllowTransformation(true);
         }
         
         // TODO: ANIMATION WHEN ENTERING AREA, MAYBE WITH LEANTWEEN
@@ -29,9 +30,10 @@ public class TransformingArea : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.TryGetComponent(out PlayerAbilities abilities))
+        if (other.TryGetComponent(out PlayerController controller))
         {
-            abilities.AllowTransformation(false);
+            GameManager.Instance.SetLastCheckpoint(transform);
+            controller.PlayerAbilities.AllowTransformation(false);
         }
     }
 }

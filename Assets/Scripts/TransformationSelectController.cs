@@ -10,13 +10,15 @@ public class TransformationSelectController : MonoBehaviour
     [SerializeField] private PlayerAbilities playerAbilities;
     [SerializeField] private GameObject cantTransformWarning;
 
-    private bool canTransform;
+    private bool canTransform = true;
 
     private void Awake()
     {
         playerAbilities.OnTransformationUnlocked += UnlockTransformation;
         InitButtons();
+        transform.localScale = Vector3.zero;
         gameObject.SetActive(false);
+        CheckIfAllowedTransformation(playerAbilities.CanTransform);
     }
     
     private void OnDestroy()
@@ -71,6 +73,7 @@ public class TransformationSelectController : MonoBehaviour
         if (button != null)
         {
             button.SetUnlocked();
+            button.SetInteractableIfCanTransform(playerAbilities.CanTransform);
         }
     }
 
@@ -103,9 +106,24 @@ public class TransformationSelectController : MonoBehaviour
 
     public void EnableSelector(bool enabled)
     {
-        gameObject.SetActive(enabled);
-        
-        if(!enabled) GameManager.Instance.SwitchState(GameState.Gameplay);
+        //gameObject.SetActive(enabled);
+
+        if (!enabled)
+        {
+            LeanTween.scale(gameObject, Vector3.zero, 0.15f).setOnComplete(CloseSelector).setIgnoreTimeScale(true);
+            //GameManager.Instance.SwitchState(GameState.Gameplay);
+        }
+        else
+        {
+            gameObject.SetActive(true);
+            LeanTween.scale(gameObject, Vector3.one, 0.15f).setIgnoreTimeScale(true);
+        }
+    }
+
+    void CloseSelector()
+    {
+        gameObject.SetActive((false));
+        GameManager.Instance.SwitchState(GameState.Gameplay);
     }
 
     

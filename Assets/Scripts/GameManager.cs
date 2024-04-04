@@ -7,6 +7,15 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    [SerializeField] private DoorPillar finalDoor;
+
+    [SerializeField] PlayerController player;
+
+    [SerializeField] private RectTransform fade;
+
+    private Transform lastCheckpoint;
+    private bool restartingPlayer = false;
+
     private GameState currentState;
     public event Action<GameState> OnGameStateChanged;
 
@@ -14,6 +23,13 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+        
+    }
+
+    private void Start()
+    {
+        LeanTween.color(fade, Color.clear, 1f);
+
     }
 
     private void Update()
@@ -41,7 +57,7 @@ public class GameManager : MonoBehaviour
         {
             if (currentState == GameState.Gameplay) return;
             UIManager.instance.EnabledTransformSelector(false);
-            SwitchState(GameState.Gameplay);
+            //SwitchState(GameState.Gameplay);
         }
     }
 
@@ -63,6 +79,32 @@ public class GameManager : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
+    }
+
+    public void RestartToCheckpoint()
+    {
+        // FADE
+        if(restartingPlayer) return;
+        restartingPlayer = true;
+        LeanTween.color(fade, Color.black, 0.5f).setLoopPingPong(1);
+        Invoke(nameof(MovePlayerToCheckpoint), 0.5f);
+
+    }
+
+    void MovePlayerToCheckpoint()
+    {
+        player.transform.position = lastCheckpoint ? lastCheckpoint.position : Vector3.zero;
+        restartingPlayer = false;
+    }
+    
+    public void SetLastCheckpoint(Transform checkpoint)
+    {
+        lastCheckpoint = checkpoint;
+    }
+
+    public void OpenFinalDoor()
+    {
+        
     }
 }
 

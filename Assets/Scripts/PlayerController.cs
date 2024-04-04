@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private Collider2D mainCollider;
 
     [SerializeField] LayerMask interactableMask;
     [Header("Transformations")] 
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PhysicsMaterial2D normalPMaterial;
     [SerializeField] private PhysicsMaterial2D bouncyPMaterial;
     [SerializeField] private PhysicsMaterial2D superBouncyPMaterial;
+    [SerializeField] private Collider2D bouncyCollider;
     
     [Header("Spells")]
     [SerializeField] private float spellFireRate = 2f;
@@ -40,6 +42,8 @@ public class PlayerController : MonoBehaviour
 
     private PlayerAbilities playerAbilites;
     private PlayerAnimations playerAnimations;
+
+    public PlayerAbilities PlayerAbilities => playerAbilites;
 
     private void Awake()
     {
@@ -107,6 +111,7 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = originalGravityScale;
         gameObject.layer = 7; // Normal Player Layer
         rb.sharedMaterial = normalPMaterial;
+        mainCollider.enabled = true;
         _mainControllerEnabled = true;
         
         Vector3 newScale = defaultScale;
@@ -147,6 +152,8 @@ public class PlayerController : MonoBehaviour
         ResetScaleAndValues();
 
         //_mainControllerEnabled = false;
+        mainCollider.enabled = false;
+        bouncyCollider.enabled = true;
         rb.sharedMaterial = bouncyPMaterial;
     }
 
@@ -267,6 +274,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector2.zero;
         hInput = 0;
     }
+    
 
     private void OnDestroy()
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Lever : MonoBehaviour
 {
-    [SerializeField] Animator doorToOpen;
+    [SerializeField] DoorPillar doorToOpen;
     [SerializeField] private SpriteRenderer visual;
     [SerializeField] private Sprite activatedSprite;
     void Start()
@@ -23,7 +23,7 @@ public class Lever : MonoBehaviour
             Debug.Log("Trigger?");
             if (other.gameObject.TryGetComponent(out AnimalController animal))
             {
-                doorToOpen.SetBool("Open", true);
+                doorToOpen.OpenOnce();
                 visual.sprite = activatedSprite;
                 
                 // Disable components after activation

@@ -57,7 +57,7 @@ public class TransformationSelectButton : MonoBehaviour
 
     public void Select()
     {
-        if(!unlocked) return;
+        if(!unlocked || !button.interactable) return;
         OnAnySelected?.Invoke();
         playerAbilities.Transform(transformation);
     }

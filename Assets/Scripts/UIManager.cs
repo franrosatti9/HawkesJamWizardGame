@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -9,8 +10,9 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
     [SerializeField] private GameObject abilitiesUI;
-    [SerializeField] private GameObject transformSelectorUI;
+    [SerializeField] private TransformationSelectController transformSelectorUI;
     [SerializeField] private Image selectedSpellImage;
+    [SerializeField] private TextMeshProUGUI selectedSpellText;
 
     private void Awake()
     {
@@ -32,19 +34,20 @@ public class UIManager : MonoBehaviour
         return abilitiesUI.activeSelf;
     }
 
-    public void ChangeSelectedSpellUI(Sprite spellSprite)
+    public void ChangeSelectedSpellUI(Sprite spellSprite, string spellName)
     {
         selectedSpellImage.sprite = spellSprite;
+        selectedSpellText.text = spellName;
     }
     
-    public void EnabledTransformSelector(bool enabled)
+    public void EnabledTransformSelector(bool enable)
     {
-        transformSelectorUI.SetActive(enabled);
+        transformSelectorUI.EnableSelector(enable);
     }
 
     public bool IsTransformSelectorOn()
     {
-        return transformSelectorUI.activeSelf;
+        return transformSelectorUI.gameObject.activeSelf;
     }
 
     public bool IsAbilitiesUIOn()
