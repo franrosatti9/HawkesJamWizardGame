@@ -49,6 +49,7 @@ public class UIManager : MonoBehaviour
     
     public void EnabledTransformSelector(bool enable)
     {
+        if (endGameScreen.activeSelf) return;
         transformSelectorUI.EnableSelector(enable);
     }
 

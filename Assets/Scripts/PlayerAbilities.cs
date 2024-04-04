@@ -17,6 +17,7 @@ public class PlayerAbilities : MonoBehaviour
     private bool canTransform;
     private SpellSO selectedSpell;
     private TransformationSO currentTransformation;
+    private int totalDnaStones = 0;
 
 
 
@@ -127,6 +128,8 @@ public class PlayerAbilities : MonoBehaviour
     public void AddDNAStone()
     {
         dnaStones++;
+        totalDnaStones++;
+        GameManager.Instance.SignProgress.CheckStones(totalDnaStones);
         // SFX
     }
 

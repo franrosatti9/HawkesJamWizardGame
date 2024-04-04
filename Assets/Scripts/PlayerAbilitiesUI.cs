@@ -55,7 +55,7 @@ public class PlayerAbilitiesUI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
@@ -69,7 +69,7 @@ public class PlayerAbilitiesUI : MonoBehaviour
                 Debug.Log("UNLOCK TESTING");
             }
         }
-    }
+    }*/
 
     public void CheckCombination()
     {
@@ -104,7 +104,7 @@ public class PlayerAbilitiesUI : MonoBehaviour
             {
                 outputText.text = "???";
                 outputSprite.sprite = undiscoveredSprite;
-                createCombinationButton.interactable = true;
+                if(_playerAbilities.DNAStones > 0) createCombinationButton.interactable = true;
             }
         }
         else

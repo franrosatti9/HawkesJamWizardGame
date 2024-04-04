@@ -13,13 +13,13 @@ public class SignProgressController : MonoBehaviour
 
     public void OnUnlockFirstAbility()
     {
-        initialSign.SetMessage("Come back after discovering all 6 abilities to take your final exam! Explore, and remember, colors will be pleased to help you.");
+        initialSign.SetMessage("Come back after discovering getting all 6 stones to take your final exam! Explore, and remember, colors will be pleased to help you.");
         
         tutSign1.DestroySign();
         tutSign2.DestroySign();
     }
 
-    public void OnUnlockAllAbilities()
+    public void OnAllStonesGrabbed()
     {
         // OPEN BRIDGE
 
@@ -32,9 +32,13 @@ public class SignProgressController : MonoBehaviour
         {
             OnUnlockFirstAbility();
         }
-        else if (abilitiesUnlocked >= 6)
+    }
+
+    public void CheckStones(int stoneAmount)
+    {
+        if (stoneAmount >= 7)
         {
-            OnUnlockAllAbilities();
+            OnAllStonesGrabbed();
         }
     }
 }
