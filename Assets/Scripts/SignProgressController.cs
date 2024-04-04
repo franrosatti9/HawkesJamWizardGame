@@ -8,6 +8,8 @@ public class SignProgressController : MonoBehaviour
     [SerializeField] private InfoSign initialSign;
     [SerializeField] private InfoSign tutSign1;
     [SerializeField] private InfoSign tutSign2;
+    [SerializeField] private GameObject bridge;
+    [SerializeField] private Vector2 finalBridgePosition;
 
     public void OnUnlockFirstAbility()
     {
@@ -20,6 +22,8 @@ public class SignProgressController : MonoBehaviour
     public void OnUnlockAllAbilities()
     {
         // OPEN BRIDGE
+
+        LeanTween.move(bridge, finalBridgePosition, 4f);
     }
 
     public void CheckProgress(int abilitiesUnlocked)

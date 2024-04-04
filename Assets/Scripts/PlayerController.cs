@@ -224,7 +224,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
     }
 
     private void Flip()
@@ -277,10 +277,12 @@ public class PlayerController : MonoBehaviour
 
     public void EnableInputAndGravity(bool transforming)
     {
+        Debug.Log("Input Enabled = " + !transforming);
+        
+        hInput = 0;
         _inputEnabled = !transforming;
         rb.isKinematic = transforming;
         rb.velocity = Vector2.zero;
-        hInput = 0;
     }
     
 

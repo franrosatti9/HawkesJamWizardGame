@@ -70,6 +70,7 @@ public class PlayerAnimations : MonoBehaviour
         currentAnimator.SetTrigger("TransformTo");
         yield return new WaitForSeconds(0.5f);
         transformAction?.Invoke();
+        VFXManager.Instance.CreateVFXAtPoint(transform.position, AllVfx.SmokeParticles);
         EnableSpriteAndAnimator(to);
         yield return new WaitForSeconds(0.5f);
         OnTransformAnim?.Invoke(false);

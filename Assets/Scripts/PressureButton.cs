@@ -9,23 +9,29 @@ public class PressureButton : MonoBehaviour
     [SerializeField] private SpriteRenderer visual;
     [SerializeField] private Sprite pressedSprite;
     [SerializeField] private Sprite unpressedSprite;
+    [SerializeField] private bool inversedButton = false;
     
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.TryGetComponent(out AnimalController animal))
+        if (other.gameObject.TryGetComponent(out SpellTarget animal))
         {
-            doorToOpen.Open();
+            if(!inversedButton) doorToOpen.Open();
+            else doorToOpen.Close();
+            
             visual.sprite = pressedSprite;
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.TryGetComponent(out AnimalController animal))
+        if (other.gameObject.TryGetComponent(out SpellTarget animal))
         {
-            doorToOpen.Close();
+            if(!inversedButton) doorToOpen.Close();
+            else doorToOpen.Open();
+            
             visual.sprite = unpressedSprite;
         }
     }
+    
 }

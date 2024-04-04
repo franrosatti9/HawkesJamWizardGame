@@ -110,6 +110,7 @@ public class TransformationSelectController : MonoBehaviour
 
         if (!enabled)
         {
+            GameManager.Instance.SwitchState(GameState.Gameplay);
             LeanTween.scale(gameObject, Vector3.zero, 0.15f).setOnComplete(CloseSelector).setIgnoreTimeScale(true);
             //GameManager.Instance.SwitchState(GameState.Gameplay);
         }
@@ -123,7 +124,7 @@ public class TransformationSelectController : MonoBehaviour
     void CloseSelector()
     {
         gameObject.SetActive((false));
-        GameManager.Instance.SwitchState(GameState.Gameplay);
+        
     }
 
     

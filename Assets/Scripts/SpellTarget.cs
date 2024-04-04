@@ -24,6 +24,7 @@ public class SpellTarget : MonoBehaviour
     [SerializeField] SpriteRenderer mainSpriteRenderer;
     [SerializeField] private GameObject squareSpriteRenderer;
     [SerializeField] private Collider2D squareCollider;
+    [SerializeField] private bool startSquarified = false;
 
     [Header("Grow")] 
     [SerializeField] private Vector3 growSize;
@@ -34,6 +35,7 @@ public class SpellTarget : MonoBehaviour
     {
         defaultScale = transform.localScale;
         TryGetComponent(out animalController);
+        if(startSquarified) Squarify();
     }
 
     private void ResetScaleAndValues()

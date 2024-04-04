@@ -34,7 +34,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(AllSfx sfx)
     {
-        sfxSource.PlayOneShot(sfxDictionary[sfx]);
+        if(sfxDictionary.TryGetValue(sfx, out var clip)) sfxSource.PlayOneShot(clip);
     }
 
     public void PlaySFX(AudioClip sfx)
@@ -46,5 +46,6 @@ public class AudioManager : MonoBehaviour
 public enum AllSfx
 {
     Transform,
-    CastSpell
+    CastSpell,
+    BridgeOpenSfx
 }

@@ -16,9 +16,7 @@ public class VFXManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-    }
-    void Start()
-    {
+        
         vfxDictionary[AllVfx.SmokeParticles] = smokeParticlesPrefab;
     }
 
