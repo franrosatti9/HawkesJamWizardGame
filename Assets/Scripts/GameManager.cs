@@ -112,6 +112,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EndGame()
+    {
+        UIManager.instance.EndGameScreen();
+        SwitchState(GameState.Paused);
+    }
+
     public void CloseGame()
     {
         Application.Quit();

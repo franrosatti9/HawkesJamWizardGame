@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject mainMenuCanvas;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject credits;
+    [SerializeField] private GameObject endGameScreen;
 
     private void Awake()
     {
@@ -35,6 +36,7 @@ public class UIManager : MonoBehaviour
 
     public bool ToggleAbilitiesUI()
     {
+        if (pauseMenu.activeSelf) return true;
         abilitiesUI.SetActive(!abilitiesUI.activeSelf);
         return abilitiesUI.activeSelf;
     }
@@ -91,7 +93,7 @@ public class UIManager : MonoBehaviour
     {
         pauseMenu.SetActive(false);
 
-        if (abilitiesUI.activeSelf) return;
+        if (abilitiesUI.activeSelf || endGameScreen.activeSelf) return;
         if (transformSelectorUI.gameObject.activeSelf)
         {
             transformSelectorUI.EnableSelector(false);
@@ -116,6 +118,12 @@ public class UIManager : MonoBehaviour
         {
             OpenPauseMenu();
         }
+    }
+
+    public void EndGameScreen()
+    {
+        endGameScreen.SetActive(true);
+        // TODO: TRY ANIMATE WITH LEAN TWEEN IF HAVE ENOUGH TIME
     }
 
     public void CloseMainMenu()
