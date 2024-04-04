@@ -15,6 +15,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private Image selectedSpellImage;
     [SerializeField] private TextMeshProUGUI selectedSpellText;
+    [SerializeField] private GameObject mainMenuCanvas;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject credits;
 
     private void Awake()
     {
@@ -70,5 +73,54 @@ public class UIManager : MonoBehaviour
     public bool IsAbilitiesUIOn()
     {
         return abilitiesUI.activeSelf;
+    }
+
+    public void ToggleCredits()
+    {
+        credits.SetActive(!credits.activeSelf);
+    }
+
+    public void OpenPauseMenu()
+    {
+        pauseMenu.SetActive(true);
+        
+        GameManager.Instance.SwitchState(GameState.Paused);
+    }
+
+    public void ClosePauseMenu()
+    {
+        pauseMenu.SetActive(false);
+
+        if (abilitiesUI.activeSelf) return;
+        if (transformSelectorUI.gameObject.activeSelf)
+        {
+            transformSelectorUI.EnableSelector(false);
+            return; // Return to not try change state twice
+        }
+        GameManager.Instance.SwitchState(GameState.Gameplay);
+    }
+
+    public void ResetPlayerButton()
+    {
+        ClosePauseMenu();
+        GameManager.Instance.RestartToCheckpoint();
+    }
+
+    public void TogglePauseMenu()
+    {
+        if (pauseMenu.activeSelf)
+        {
+            ClosePauseMenu();
+        }
+        else
+        {
+            OpenPauseMenu();
+        }
+    }
+
+    public void CloseMainMenu()
+    {
+        mainMenuCanvas.SetActive(false);
+        GameManager.Instance.StartGame();
     }
 }

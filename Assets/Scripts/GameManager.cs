@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     private Transform lastCheckpoint;
     private bool restartingPlayer = false;
+    private bool gameStarted = false;
     public SignProgressController SignProgress { get; private set; }
 
     private GameState currentState;
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
         else Destroy(gameObject);
 
         SignProgress = GetComponent<SignProgressController>();
+        player.DisableMovement();
     }
 
     private void Start()
@@ -36,6 +38,8 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (!gameStarted) return;
+        
         if (Input.GetKeyDown(KeyCode.Tab) && !UIManager.instance.IsTransformSelectorOn())
         {
             bool on = UIManager.instance.ToggleAbilitiesUI();
@@ -61,6 +65,11 @@ public class GameManager : MonoBehaviour
             UIManager.instance.EnabledTransformSelector(false);
             //SwitchState(GameState.Gameplay);
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UIManager.instance.TogglePauseMenu();
+        }
     }
 
     public void SwitchState(GameState newState)
@@ -69,6 +78,8 @@ public class GameManager : MonoBehaviour
         
         currentState = newState;
         OnGameStateChanged?.Invoke(currentState);
+        
+        Debug.Log(newState.ToString());
         
         switch (newState)
         {
@@ -81,6 +92,29 @@ public class GameManager : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(newState), newState, null);
         }
+    }
+
+    public void StartGame()
+    {
+        gameStarted = true;
+        AllowPlayerMovement(true);
+    }
+
+    public void AllowPlayerMovement(bool allow)
+    {
+        if (allow)
+        {
+            player.EnableMovement();
+        }
+        else
+        {
+            player.DisableMovement();
+        }
+    }
+
+    public void CloseGame()
+    {
+        Application.Quit();
     }
 
     public void RestartToCheckpoint()
