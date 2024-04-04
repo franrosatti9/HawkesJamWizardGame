@@ -13,7 +13,7 @@ public class SignProgressController : MonoBehaviour
 
     public void OnUnlockFirstAbility()
     {
-        initialSign.SetMessage("Come back after discovering getting all 6 stones to take your final exam! Explore, and remember, colors will be pleased to help you.");
+        initialSign.SetMessage("Come back after discovering getting all 7 stones to take your final exam! Explore, and remember, colors will be pleased to help you.");
         
         tutSign1.DestroySign();
         tutSign2.DestroySign();
