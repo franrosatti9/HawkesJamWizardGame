@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     private Transform lastCheckpoint;
     private bool restartingPlayer = false;
+    public SignProgressController SignProgress { get; private set; }
 
     private GameState currentState;
     public event Action<GameState> OnGameStateChanged;
@@ -23,7 +24,8 @@ public class GameManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-        
+
+        SignProgress = GetComponent<SignProgressController>();
     }
 
     private void Start()

@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     [SerializeField] private GameObject abilitiesUI;
     [SerializeField] private TransformationSelectController transformSelectorUI;
+    [SerializeField] private GameObject infoTextPanel;
+    [SerializeField] private TextMeshProUGUI infoText;
     [SerializeField] private Image selectedSpellImage;
     [SerializeField] private TextMeshProUGUI selectedSpellText;
 
@@ -48,6 +50,21 @@ public class UIManager : MonoBehaviour
     public bool IsTransformSelectorOn()
     {
         return transformSelectorUI.gameObject.activeSelf;
+    }
+
+    public void ShowInfoText(string text)
+    {
+        infoTextPanel.SetActive(true);
+        infoText.text = text;
+        LeanTween.cancel(infoTextPanel);
+        LeanTween.moveLocalY(infoTextPanel,-500, 0.25f);
+    }
+
+    public void HideInfoText()
+    {
+        if (!infoTextPanel.activeSelf) return; // Don't animate if not shown
+        LeanTween.cancel(infoTextPanel);
+        LeanTween.moveLocalY(infoTextPanel, -800, 0.25f).setOnComplete(() => infoTextPanel.SetActive(false));
     }
 
     public bool IsAbilitiesUIOn()

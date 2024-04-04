@@ -119,6 +119,7 @@ public class PlayerAbilitiesUI : MonoBehaviour
     {
         discoveredOutputs.Add(output);
         _playerAbilities.AddAbility(output);
+        GameManager.Instance.SignProgress.CheckProgress(discoveredOutputs.Count);
         output = null;
         UpdateUI();
     }

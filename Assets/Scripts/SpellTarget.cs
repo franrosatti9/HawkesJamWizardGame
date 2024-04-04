@@ -110,10 +110,12 @@ public class SpellTarget : MonoBehaviour
         {
             LeanTween.scale(gameObject, growSize, 0.25f).setEaseOutBounce();
             VFXManager.Instance.CreateVFXAtPoint(mainSpriteRenderer.transform.position, AllVfx.SmokeParticles, growSize);
+            grown = true;
             //transform.localScale = growSize;
         }
         else
         {
+            grown = false;
             LeanTween.scale(gameObject, defaultScale, 0.25f).setEaseOutBounce();
             VFXManager.Instance.CreateVFXAtPoint(mainSpriteRenderer.transform.position, AllVfx.SmokeParticles, defaultScale);
             //transform.localPosition = defaultScale;

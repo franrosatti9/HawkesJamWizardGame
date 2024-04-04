@@ -13,10 +13,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float speed = 8f;
     [SerializeField] float jumpForce = 16f;
     private float defaultJumpForce;
+    private float defaultGroundCheckRadius;
     private bool isFacingRight = true;
 
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Collider2D mainCollider;
 
@@ -26,12 +28,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector3 shrinkSize;
     [SerializeField] private float shrinkSpeed;
     [SerializeField] private float shrinkJumpForce;
+    [SerializeField] private float shrinkGroundCheckRadius = 0.1f;
     [SerializeField] private float liquifySpeed = 3f;
     [SerializeField] private float liquifyGravityScale = 3f;
     [SerializeField] private PhysicsMaterial2D normalPMaterial;
     [SerializeField] private PhysicsMaterial2D bouncyPMaterial;
     [SerializeField] private PhysicsMaterial2D superBouncyPMaterial;
-    [SerializeField] private Collider2D bouncyCollider;
+    [SerializeField] private Collider2D smallCollider;
     
     [Header("Spells")]
     [SerializeField] private float spellFireRate = 2f;
@@ -77,6 +80,7 @@ public class PlayerController : MonoBehaviour
         
         defaultScale = transform.localScale;
         defaultJumpForce = jumpForce;
+        defaultGroundCheckRadius = 0.2f;
         originalSpeed = speed;
         originalGravityScale = rb.gravityScale;
     }
@@ -113,6 +117,7 @@ public class PlayerController : MonoBehaviour
         rb.sharedMaterial = normalPMaterial;
         mainCollider.enabled = true;
         _mainControllerEnabled = true;
+        groundCheckRadius = defaultGroundCheckRadius;
         
         Vector3 newScale = defaultScale;
         newScale.x *= Mathf.Sign(transform.localScale.x);
@@ -129,6 +134,7 @@ public class PlayerController : MonoBehaviour
         gameObject.layer = 7; // Normal Player Layer
         rb.sharedMaterial = normalPMaterial;
         _mainControllerEnabled = true;
+        groundCheckRadius = shrinkGroundCheckRadius;
         
         Vector3 newScale = shrinkSize;
         newScale.x *= Mathf.Sign(transform.localScale.x);
@@ -141,6 +147,8 @@ public class PlayerController : MonoBehaviour
     void Liquify()
     {
         ResetScaleAndValues();
+        mainCollider.enabled = false;
+        smallCollider.enabled = true;
         speed = liquifySpeed;
         rb.gravityScale = liquifyGravityScale;
         gameObject.layer = 10; // LiquidPlayer Layer
@@ -153,7 +161,7 @@ public class PlayerController : MonoBehaviour
 
         //_mainControllerEnabled = false;
         mainCollider.enabled = false;
-        bouncyCollider.enabled = true;
+        smallCollider.enabled = true;
         rb.sharedMaterial = bouncyPMaterial;
     }
 
